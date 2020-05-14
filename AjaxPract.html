@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Weather </title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	
+	
+	
+	<!--Handlebars-->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.2/handlebars.min.js"></script>
+
+	<!--BootStrap-->
+	 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+	
+	<script id="text-template" type="text/x-handlebars-template">
+		
+		<table class="table table-striped">
+			<caption class="text-center h2"> Current Weather</caption>
+			<tr><th>Current Temp</th><th>Feels Like</th><th>Today's Low</th><th>Today's High</th><th>Humidty</th></tr>
+			<tr><td>{{far}}&deg;F</td><td>{{feels}}&deg;F</td><td>{{low}}&deg;F</td><td>{{high}}&deg;F</td><td>{{hum}}%</td></tr>
+		</table>	
+	</script>
+
+	<script id="text-template2" type="text/x-handlebars-template">
+		<table class="table table-striped">
+			<caption class="text-center h2">Five Day Forecast</caption>
+			<tr><th>day1</th><th>day2</th><th>day3</th><th>day4</th><th>day5</th></tr>	
+			<tr><td>Low: {{far2}}&deg;F</td><td>Rain: {{weth}}</td></tr>
+		</table>
+
+	</script>
+	
+	<script>
+	
+	
+
+	
+
+	// api call for current weather via zip using ajax
+
+	function forecast()
+	{
+	
+		var zip = document.getElementById("zip").value;
+
+		var request = new XMLHttpRequest();
+		var link = "http://api.openweathermap.org/data/2.5/weather?zip=" + zip + ",us&appid=2d22b1c10027828def08efcae9a6c6d6";
+		
+		
+		request.open("GET",link);
+		
+		request.onload = function()
+		{
+			var data = JSON.parse(request.responseText);
+			
+			
+			
+			// data conversion for temperatures
+			var far = data.main.temp * (9/5) - 459.67;
+			var feels = data.main.feels_like * (9/5) - 459.67;
+			var low = data.main.temp_min * (9/5) - 459.67;
+			var high = data.main.temp_max * (9/5) - 459.67;
+			var hum = data.main.humidity;
+			
+			//content for handlebars variables
+			var content = {far:far.toFixed(0),
+				feels:feels.toFixed(0),
+				low: low.toFixed(0),
+				high:high.toFixed(0),
+				hum:hum};
+			
+			if(request.status == 200)
+			{
+				//handlebars compile
+				var handle = document.getElementById("text-template").innerHTML;
+				var template = Handlebars.compile(handle);
+				var html = template(content);
+				
+				document.getElementById("disp").innerHTML= html;
+					
+				 
+				
+			}
+			
+			else
+			{
+				disp.innerHTML = "Something went wrong";
+			}
+		}
+	
+		request.send(null);
+	
+	
+	}
+
+	//ajax request for 5 day forcast
+	function fiveday()
+	{
+		var zip = document.getElementById("zip").value;
+
+		var request2 = new XMLHttpRequest();
+		var link2 = "http://api.openweathermap.org/data/2.5/forecast?zip=" + zip + ",us&appid=2d22b1c10027828def08efcae9a6c6d6";
+		request2.open("GET",link2)
+
+		request2.onload = function ()
+		{
+			var data2 = JSON.parse(request2.responseText);
+
+			
+
+		 // data conversion for temperatures
+			
+
+
+			var far2 = data2.list[3].main.temp_min * (9/5) - 459.67;
+			var weth = data2.list[3].weather[0].description;
+
+			var content2 ={far2:far2.toFixed(0), weth:weth};
+
+			if(request2.status == 200)
+			{
+
+				var handle2 = document.getElementById("text-template2").innerHTML;
+				var template2 = Handlebars.compile(handle2);
+				var html2 = template2(content2);
+
+				document.getElementById("disp2").innerHTML = html2;
+
+
+
+			}
+
+			else
+			{
+				disp2.innerHTML = "something went wrong"
+			}
+
+			
+
+		}
+		request2.send(null);
+
+	}
+
+
+
+	
+	
+	
+	</script>
+	
+	
+	
+</head>
+
+
+
+	<body class="container-fluid">
+		<h1> Hourly Forcast by zip</h1>
+		
+		<form>
+		<label for="txt1">Enter Zip Code</label>
+		<input type="text" id="zip">
+		<input type="button" id="sbmt" value="submit">
+			
+		</form>
+		
+		<div id="disp">
+		</div>
+		<div id="disp2">
+		</div>
+
+
+		<script>
+			 var submit =document.getElementById("sbmt");
+			 submit.addEventListener('click',forecast);
+			 submit.addEventListener('click',fiveday);
+
+		</script>
+	</body>
+
+
+</html>
