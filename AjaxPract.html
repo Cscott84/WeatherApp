@@ -17,6 +17,8 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
 	
+
+	<!--handlebars script for current weather-->
 	<script id="text-template" type="text/x-handlebars-template">
 		
 		<table class="table table-striped">
@@ -26,11 +28,16 @@
 		</table>	
 	</script>
 
+	<!--handlebars for 5 day forecast-->
 	<script id="text-template2" type="text/x-handlebars-template">
 		<table class="table table-striped">
 			<caption class="text-center h2">Five Day Forecast</caption>
-			<tr><th>day1</th><th>day2</th><th>day3</th><th>day4</th><th>day5</th></tr>	
-			<tr><td>Low: {{far2}}&deg;F</td><td>Rain: {{weth}}</td></tr>
+			<tr><th>day1</th><th>day2</th><th>day3</th><th>day4</th><th>day5</th></tr>
+			<tr><td>High: {{highD0}}&deg;F</td><td>High: {{highD1}}&deg;F</td><td>High: {{highD2}}&deg;F</td><td>High: {{highD3}}&deg;F</td><td>High: {{highD4}}</td></tr>	
+			<tr><td>Low: {{lowD0}}&deg;F</td><td>Low: {{lowD1}}&deg;F</td><td>Low:{{lowD2}}&deg;F</td><td>Low: {{lowD3}}&deg;F</td><td>Low: {{lowD4}}</td></tr>
+			<tr><td>Humidty: {{humD0}}%</td><td>Humidity: {{humD1}}%</td><td>Humidity: {{humD2}}%</td><td>Humidity: {{humD3}}%</td><td>Humidity: {{humD4}}%</td></tr>
+			<tr><td>AM Rain: {{amWethD0}}</td><td>AM Rain: {{amWethD1}}</td><td>AM Rain: {{amWethD2}}</td><td>Am Rain: {{amWethD3}}</td><td>AM Rain: {{amWethD4}}</td></tr>
+			<tr><td>PM Rain: {{pmWethD0}}</td><td>PM Rain: {{pmWethD1}}</td><td>PM: Rain: {{pmWethD2}}</td><td>PM Rain: {{pmWethD3}}</td><td>PM Rain: {{pmWethD4}}</td></tr>
 		</table>
 
 	</script>
@@ -115,12 +122,80 @@
 
 		 // data conversion for temperatures
 			
+			//day 1 information variables
 
+			var highD0 = data2.list[9].main.temp_max * (9/5) -459.67;
+			var lowD0 = data2.list[4].main.temp_min * (9/5) - 459.67;
+			var humD0 = data2.list[4].main.humidity;
+			var amWethD0 = data2.list[4].weather[0].description;
+			var pmWethD0 = data2.list[9].weather[0].description;
 
-			var far2 = data2.list[3].main.temp_min * (9/5) - 459.67;
-			var weth = data2.list[3].weather[0].description;
+			//day 2 information variables
+			var highD1 = data2.list[17].main.temp_max * (9/5) -459.67;
+			var lowD1 = data2.list[12].main.temp_min * (9/5) - 459.67;
+			var humD1 = data2.list[17].main.humidity;
+			var amWethD1 = data2.list[12].weather[0].description;
+			var pmWethD1 = data2.list[17].weather[0].description;
 
-			var content2 ={far2:far2.toFixed(0), weth:weth};
+			//day3 information variables
+			var highD2 = data2.list[25].main.temp_max * (9/5) -459.67;
+			var lowD2 = data2.list[20].main.temp_min * (9/5) - 459.67;
+			var humD2 = data2.list[25].main.humidity;
+			var amWethD2 = data2.list[20].weather[0].description;
+			var pmWethD2 = data2.list[25].weather[0].description;
+
+			//day4 information variables
+			var highD3 = data2.list[33].main.temp_max * (9/5) -459.67;
+			var lowD3 = data2.list[28].main.temp_min * (9/5) - 459.67;
+			var humD3 = data2.list[33].main.humidity;
+			var amWethD3 = data2.list[28].weather[0].description;
+			var pmWethD3 = data2.list[33].weather[0].description;
+
+			//day5 information variables
+			var highD4 = data2.list[33].main.temp_max * (9/5) -459.67;
+			var lowD4 = data2.list[28].main.temp_min * (9/5) - 459.67;
+			var humD4 = data2.list[33].main.humidity;
+			var amWethD4 = data2.list[28].weather[0].description;
+			var pmWethD4 = data2.list[33].weather[0].description;
+			
+			var content2 ={
+				//day 1 
+
+				highD0:highD0.toFixed(0),
+				lowD0:lowD0.toFixed(0),
+				humD0:humD0, 
+				amWethD0:amWethD0,
+				pmWethD0:pmWethD0,
+			
+				//day2
+				highD1:highD1.toFixed(0),
+				lowD1:lowD1.toFixed(0),
+				humD1:humD1, 
+				amWethD1:amWethD1,
+				pmWethD1:pmWethD1,
+
+				//day3
+				highD2:highD2.toFixed(0),
+				lowD2:lowD2.toFixed(0),
+				humD2:humD2, 
+				amWethD2:amWethD2,
+				pmWethD2:pmWethD2,
+
+				//day 4
+				highD3:highD3.toFixed(0),
+				lowD3:lowD3.toFixed(0),
+				humD3:humD3, 
+				amWethD3:amWethD3,
+				pmWethD3:pmWethD3,	
+
+				//day 5
+				highD4:highD4.toFixed(0),
+				lowD4:lowD4.toFixed(0),
+				humD4:humD4, 
+				amWethD4:amWethD4,
+				pmWethD4:pmWethD4,
+
+			};
 
 			if(request2.status == 200)
 			{
